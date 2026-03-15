@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { db } from "../services/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
@@ -203,7 +204,7 @@ export default function Dashboard() {
 
         {/* Action Buttons */}
         <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", justifyContent: "flex-end" }}>
-          <a href="/calendar" className="btn-crimson">📅 View Calendar</a>
+          <Link to="/calendar" className="btn-crimson">📅 View Calendar</Link>
           <button onClick={exportToCSV} className="btn-crimson">📥 Export to CSV</button>
         </div>
 
