@@ -1,0 +1,898 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   CSS VARIABLES — CRIMSON + BLACK THEME
+   ============================================================ */
+:root,
+[data-theme="dark"] {
+  --bg: #000000;
+  --bg-secondary: #0f0f0f;
+  --bg-card: #111111;
+  --bg-card2: #1a1a1a;
+  --border: rgba(220, 20, 60, 0.18);
+  --text: #f0f0f0;
+  --text-muted: #aaaaaa;
+  --text-dark: #111111;
+  --accent: #DC143C;
+  --accent-dark: #8B0000;
+  --accent-soft: rgba(220, 20, 60, 0.12);
+  --accent-glow: rgba(220, 20, 60, 0.4);
+  --accent-glow2: rgba(220, 20, 60, 0.2);
+  --input-bg: #1a1a1a;
+  --input-border: #333;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  --navbar-bg: rgba(0, 0, 0, 0.95);
+  --hero-glow: radial-gradient(circle at 50% 40%, rgba(220, 20, 60, 0.15), transparent 70%);
+}
+
+[data-theme="light"] {
+  --bg: #ffffff;
+  --bg-secondary: #f7f7f7;
+  --bg-card: #ffffff;
+  --bg-card2: #f2f2f2;
+  --border: rgba(220, 20, 60, 0.15);
+  --text: #111111;
+  --text-muted: #555555;
+  --text-dark: #111111;
+  --accent: #DC143C;
+  --accent-dark: #8B0000;
+  --accent-soft: rgba(220, 20, 60, 0.07);
+  --accent-glow: rgba(220, 20, 60, 0.3);
+  --accent-glow2: rgba(220, 20, 60, 0.15);
+  --input-bg: #ffffff;
+  --input-border: #e0e0e0;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  --navbar-bg: rgba(255, 255, 255, 0.97);
+  --hero-glow: none;
+}
+
+/* ============================================================
+   GLOBAL BASE
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.35s ease, color 0.35s ease;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  margin: 0;
+  position: relative;
+  isolation: isolate;
+}
+
+/* ── Dark mode: full-page crimson gradient (edge-to-edge) ───────────
+   A fixed pseudo-element renders BEHIND all content (z-index: -1),
+   covering the entire viewport at all scroll positions.
+   Smooth linear gradient: pure black → deep crimson → dark blood-red
+   No centered circles — the gradient fills the entire screen evenly.
+   Light mode: this block is absent — body keeps its plain white bg.
+─────────────────────────────────────────────────────────────────── */
+[data-theme="dark"] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  /* Full-page glowy red — every corner has deep crimson, no black corners */
+  background:
+    radial-gradient(ellipse 120% 120% at 50% 50%, #6b0020 0%, #3b0012 40%, #1a0008 70%, #0d0003 100%),
+    linear-gradient(135deg, #8B0000 0%, #3b0012 50%, #8B0000 100%);
+}
+
+/* ── Light mode: same red radial glow ────────────────────────────── */
+[data-theme="light"] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  /* Same glowy red as dark mode — every corner has deep crimson */
+  background:
+    radial-gradient(ellipse 120% 120% at 50% 50%, #6b0020 0%, #3b0012 40%, #1a0008 70%, #0d0003 100%),
+    linear-gradient(135deg, #8B0000 0%, #3b0012 50%, #8B0000 100%);
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-dark);
+}
+
+/* ============================================================
+   THEME-AWARE UTILITY CLASSES
+   ============================================================ */
+/* In dark mode the body::before provides the full-page atmosphere;
+   .theme-bg only needs to set background-color on light mode.
+   On dark mode we use transparent so the body pseudo-element shows. */
+[data-theme="dark"] .theme-bg {
+  background: transparent;
+}
+
+[data-theme="light"] .theme-bg {
+  background-color: var(--bg);
+  transition: background-color 0.35s ease;
+}
+
+.theme-bg-card {
+  background-color: var(--bg-card);
+  transition: background-color 0.35s ease;
+}
+
+.theme-bg-card2 {
+  background-color: var(--bg-card2);
+  transition: background-color 0.35s ease;
+}
+
+.theme-text {
+  color: var(--text);
+  transition: color 0.35s ease;
+}
+
+.theme-text-muted {
+  color: var(--text-muted);
+  transition: color 0.35s ease;
+}
+
+.theme-border {
+  border-color: var(--border);
+  transition: border-color 0.35s ease;
+}
+
+.theme-shadow {
+  box-shadow: var(--shadow);
+}
+
+.accent-text {
+  color: var(--accent);
+}
+
+/* ============================================================
+   CRIMSON BUTTONS
+   ============================================================ */
+.btn-crimson {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #DC143C, #8B0000);
+  color: #ffffff;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 12px rgba(220, 20, 60, 0.3);
+  backdrop-filter: blur(4px);
+  text-decoration: none;
+}
+
+.btn-crimson::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-crimson:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 24px rgba(220, 20, 60, 0.55);
+}
+
+.btn-crimson:hover::before {
+  opacity: 1;
+}
+
+.btn-crimson:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 10px rgba(220, 20, 60, 0.3);
+}
+
+.btn-crimson:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Outline variant */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: transparent;
+  color: var(--accent);
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 1.5px solid var(--accent);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-outline:hover {
+  background: var(--accent-soft);
+  box-shadow: 0 0 14px var(--accent-glow2);
+  transform: scale(1.04);
+}
+
+.btn-outline:active {
+  transform: scale(0.97);
+}
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 32px var(--accent-glow2);
+}
+
+/* ============================================================
+   INPUTS
+   ============================================================ */
+.input-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--input-bg);
+  border: 1.5px solid var(--input-border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.9rem;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.35s ease;
+  outline: none;
+}
+
+.input-field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow2);
+}
+
+.input-field::placeholder {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   NAVBAR TOGGLE SWITCH
+   ============================================================ */
+.theme-toggle {
+  position: relative;
+  width: 56px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.theme-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.toggle-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 100px;
+  background: linear-gradient(135deg, #DC143C, #8B0000);
+  cursor: pointer;
+  transition: background 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  font-size: 13px;
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.theme-toggle input:checked~.toggle-thumb {
+  transform: translateX(28px);
+}
+
+[data-theme="light"] .toggle-track {
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+}
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.navbar {
+  background: var(--navbar-bg);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  transition: background-color 0.35s ease, box-shadow 0.3s ease, border-color 0.35s ease;
+}
+
+.navbar.scrolled {
+  box-shadow: 0 2px 20px rgba(220, 20, 60, 0.15);
+}
+
+.nav-link {
+  position: relative;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.25rem;
+  transition: color 0.25s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--accent);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* ============================================================
+   HERO GLOW
+   ============================================================ */
+.hero-glow {
+  background: var(--hero-glow);
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #DC143C, #ff4d6d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================================
+   FADE-IN ON SCROLL
+   ============================================================ */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+/* ============================================================
+   REACT CALENDAR — THEMING
+   ============================================================ */
+.react-calendar {
+  width: 100%;
+  max-width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-family: inherit;
+  color: var(--text);
+  box-shadow: var(--shadow);
+  transition: background-color 0.35s ease;
+}
+
+.react-calendar *,
+.react-calendar *::before,
+.react-calendar *::after {
+  box-sizing: border-box;
+}
+
+.react-calendar button {
+  margin: 0;
+  border: 0;
+  outline: none;
+}
+
+.react-calendar button:enabled:hover {
+  background-color: var(--accent-soft);
+  border-radius: 8px;
+}
+
+.react-calendar__navigation {
+  display: flex;
+  height: 44px;
+  margin-bottom: 1em;
+}
+
+.react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.react-calendar__navigation button:disabled {
+  background-color: transparent;
+  color: var(--text-muted);
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: var(--accent-soft);
+}
+
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.75em;
+  color: var(--text-muted);
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  padding: 0.5em;
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: var(--accent);
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.react-calendar__tile {
+  max-width: 100%;
+  padding: 0.75rem 0.5rem;
+  background: none;
+  text-align: center;
+  line-height: 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background-color: var(--accent-soft);
+}
+
+.react-calendar__tile--now {
+  background-color: var(--bg-card2);
+  font-weight: bold;
+  color: var(--text);
+}
+
+.react-calendar__tile--hasActive,
+.react-calendar__tile--active {
+  background: linear-gradient(135deg, #DC143C, #8B0000) !important;
+  color: white !important;
+  font-weight: bold;
+  box-shadow: 0 2px 10px rgba(220, 20, 60, 0.4);
+}
+
+.react-calendar__tile--hasActive:enabled:hover,
+.react-calendar__tile--hasActive:enabled:focus,
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background: #8B0000 !important;
+}
+
+/* ============================================================
+   MISC UTILITIES
+   ============================================================ */
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+
+/* Custom responsive utilities */
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Custom scrollbar for better mobile experience */
+@layer base {
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #c7d2fe;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a5b4fc;
+  }
+}
+
+/* Better focus states for accessibility */
+@layer components {
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors focus-ring;
+  }
+
+  .btn-secondary {
+    @apply border border-purple-600 text-purple-700 px-4 py-2 rounded-lg font-medium hover:bg-purple-50 transition-colors focus-ring;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors;
+  }
+}
+
+/* ============================================================
+   REACT CALENDAR — THEME-AWARE (DARK = BLACK + CRIMSON)
+   ============================================================ */
+
+/* Base wrapper */
+.react-calendar {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 12px;
+  font-family: inherit;
+  line-height: 1.2em;
+  border: none;
+  background: transparent;
+  transition: background 0.35s ease;
+}
+
+.react-calendar--doubleView {
+  width: 700px;
+}
+
+.react-calendar--doubleView .react-calendar__viewContainer {
+  display: flex;
+  margin: -0.5em;
+}
+
+.react-calendar--doubleView .react-calendar__viewContainer>* {
+  width: 50%;
+  margin: 0.5em;
+}
+
+.react-calendar,
+.react-calendar *,
+.react-calendar *:before,
+.react-calendar *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* ── Dark mode calendar ─────────────────────────────────── */
+[data-theme="dark"] .react-calendar {
+  background: #0a0a0a !important;
+  border: 1px solid rgba(220, 20, 60, 0.2) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(220, 20, 60, 0.08) !important;
+  color: #e0e0e0 !important;
+}
+
+[data-theme="dark"] .react-calendar button {
+  color: #e0e0e0 !important;
+  background: none !important;
+  border: 0 !important;
+}
+
+[data-theme="dark"] .react-calendar button:enabled:hover {
+  background-color: rgba(220, 20, 60, 0.15) !important;
+  border-radius: 8px;
+}
+
+/* Navigation bar */
+[data-theme="dark"] .react-calendar__navigation {
+  display: flex;
+  height: 44px;
+  margin-bottom: 0.75em;
+}
+
+[data-theme="dark"] .react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+  font-size: 15px;
+  font-weight: 700;
+  color: #DC143C;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+[data-theme="dark"] .react-calendar__navigation button:disabled {
+  background-color: transparent;
+  color: #444;
+}
+
+[data-theme="dark"] .react-calendar__navigation button:enabled:hover,
+[data-theme="dark"] .react-calendar__navigation button:enabled:focus {
+  background-color: rgba(220, 20, 60, 0.12);
+}
+
+/* Weekday labels */
+[data-theme="dark"] .react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.7em;
+  color: #DC143C;
+  letter-spacing: 0.05em;
+}
+
+[data-theme="dark"] .react-calendar__month-view__weekdays__weekday {
+  padding: 0.5em;
+}
+
+[data-theme="dark"] .react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+}
+
+/* Day tiles */
+[data-theme="dark"] .react-calendar__tile {
+  max-width: 100%;
+  padding: 0.65rem 0.4rem;
+  background: none;
+  text-align: center;
+  line-height: 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #cccccc;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+[data-theme="dark"] .react-calendar__tile:enabled:hover,
+[data-theme="dark"] .react-calendar__tile:enabled:focus {
+  background-color: rgba(220, 20, 60, 0.15);
+  color: #fff;
+}
+
+/* Weekend days */
+[data-theme="dark"] .react-calendar__month-view__days__day--weekend {
+  color: #ff6b83;
+}
+
+/* Neighbouring month days */
+[data-theme="dark"] .react-calendar__month-view__days__day--neighboringMonth {
+  color: #444;
+}
+
+/* Today */
+[data-theme="dark"] .react-calendar__tile--now {
+  background: rgba(220, 20, 60, 0.18);
+  color: #ff6b83;
+  font-weight: 700;
+  border: 1px solid rgba(220, 20, 60, 0.4);
+}
+
+[data-theme="dark"] .react-calendar__tile--now:enabled:hover,
+[data-theme="dark"] .react-calendar__tile--now:enabled:focus {
+  background: rgba(220, 20, 60, 0.25);
+}
+
+/* Selected / active */
+[data-theme="dark"] .react-calendar__tile--hasActive,
+[data-theme="dark"] .react-calendar__tile--active {
+  background: linear-gradient(135deg, #DC143C, #8B0000) !important;
+  color: #fff !important;
+  font-weight: 700;
+  box-shadow: 0 2px 12px rgba(220, 20, 60, 0.5);
+}
+
+[data-theme="dark"] .react-calendar__tile--hasActive:enabled:hover,
+[data-theme="dark"] .react-calendar__tile--hasActive:enabled:focus,
+[data-theme="dark"] .react-calendar__tile--active:enabled:hover,
+[data-theme="dark"] .react-calendar__tile--active:enabled:focus {
+  background: linear-gradient(135deg, #ff3358, #DC143C) !important;
+}
+
+[data-theme="dark"] .react-calendar--selectRange .react-calendar__tile--hover {
+  background-color: rgba(220, 20, 60, 0.1);
+}
+
+/* Year/decade/century tiles */
+[data-theme="dark"] .react-calendar__year-view .react-calendar__tile,
+[data-theme="dark"] .react-calendar__decade-view .react-calendar__tile,
+[data-theme="dark"] .react-calendar__century-view .react-calendar__tile {
+  padding: 1.5em 0.5em;
+  color: #cccccc;
+}
+
+/* ── Light mode calendar ─────────────────────────────────── */
+[data-theme="light"] .react-calendar {
+  background: #ffffff;
+  border: 1px solid rgba(220, 20, 60, 0.15);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .react-calendar button {
+  color: #111;
+}
+
+[data-theme="light"] .react-calendar button:enabled:hover {
+  background-color: rgba(220, 20, 60, 0.07);
+  border-radius: 8px;
+}
+
+[data-theme="light"] .react-calendar__navigation {
+  display: flex;
+  height: 44px;
+  margin-bottom: 0.75em;
+}
+
+[data-theme="light"] .react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+  font-size: 15px;
+  font-weight: 700;
+  color: #DC143C;
+  border-radius: 8px;
+}
+
+[data-theme="light"] .react-calendar__navigation button:disabled {
+  color: #ccc;
+}
+
+[data-theme="light"] .react-calendar__navigation button:enabled:hover,
+[data-theme="light"] .react-calendar__navigation button:enabled:focus {
+  background-color: rgba(220, 20, 60, 0.08);
+}
+
+[data-theme="light"] .react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.7em;
+  color: #DC143C;
+  letter-spacing: 0.05em;
+}
+
+[data-theme="light"] .react-calendar__month-view__weekdays__weekday {
+  padding: 0.5em;
+}
+
+[data-theme="light"] .react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+}
+
+[data-theme="light"] .react-calendar__tile {
+  max-width: 100%;
+  padding: 0.65rem 0.4rem;
+  background: none;
+  text-align: center;
+  line-height: 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #333;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+[data-theme="light"] .react-calendar__tile:enabled:hover,
+[data-theme="light"] .react-calendar__tile:enabled:focus {
+  background-color: rgba(220, 20, 60, 0.08);
+  color: #DC143C;
+}
+
+[data-theme="light"] .react-calendar__month-view__days__day--weekend {
+  color: #DC143C;
+}
+
+[data-theme="light"] .react-calendar__month-view__days__day--neighboringMonth {
+  color: #bbb;
+}
+
+[data-theme="light"] .react-calendar__tile--now {
+  background: rgba(220, 20, 60, 0.1);
+  color: #DC143C;
+  font-weight: 700;
+  border: 1px solid rgba(220, 20, 60, 0.3);
+}
+
+[data-theme="light"] .react-calendar__tile--hasActive,
+[data-theme="light"] .react-calendar__tile--active {
+  background: linear-gradient(135deg, #DC143C, #8B0000) !important;
+  color: #fff !important;
+  font-weight: 700;
+}
+
+[data-theme="light"] .react-calendar__year-view .react-calendar__tile,
+[data-theme="light"] .react-calendar__decade-view .react-calendar__tile,
+[data-theme="light"] .react-calendar__century-view .react-calendar__tile {
+  padding: 1.5em 0.5em;
+}
