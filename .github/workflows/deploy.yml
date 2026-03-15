@@ -28,6 +28,24 @@ jobs:
 
       - name: Build project
         run: npm run build
+        env:
+          VITE_FIREBASE_API_KEY: "AIzaSyAng70QHlUJdNhd8Y0bFB7i1fsdOw2pJQs"
+          VITE_FIREBASE_AUTH_DOMAIN: "askmanager-be722.firebaseapp.com"
+          VITE_FIREBASE_DATABASE_URL: "https://taskmanager-be722-default-rtdb.firebaseio.com"
+          VITE_FIREBASE_PROJECT_ID: "taskmanager-be722"
+          VITE_FIREBASE_STORAGE_BUCKET: "taskmanager-be722.firebasestorage.app"
+          VITE_FIREBASE_MESSAGING_SENDER_ID: "531768258109"
+          VITE_FIREBASE_APP_ID: "1:531768258109:web:8e51780202779abbe48454"
+          VITE_FIREBASE_MEASUREMENT_ID: "G-1EK950PRKM"
+          VITE_ENABLE_DEBUG_MODE: "false"
+          VITE_ENABLE_ERROR_TRACKING: "true"
+          VITE_ERROR_TRACKING_SERVICE: "sentry"
+          VITE_ENABLE_ANALYTICS: "true"
+          VITE_ENABLE_PWA: "true"
+          VITE_API_TIMEOUT: "30000"
+          VITE_MAX_FILE_SIZE: "5242880"
+          VITE_DEV_MODE: "false"
+          VITE_LOG_LEVEL: "warn"
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
